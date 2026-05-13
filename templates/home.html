@@ -333,7 +333,7 @@
         const savedLang = JSON.parse(savedLangStr);
         langCode = savedLang.code || 'EN';
       }
-      fetch(`http://localhost:5000/welcome-audio?lang=${langCode}`)
+      fetch(`/welcome-audio?lang=${langCode}`)
         .then(response => response.blob())
         .then(blob => {
           const url = URL.createObjectURL(blob);
