@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Get Started with RIA – Tutorial</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Inter font for modern, readable typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons for UI elements -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg: #0F0F0F;
+            --bg-card: #18181b;
+            --bg-footer: #0A0A0A;
+            --primary: #F1F1F1;
+            --secondary: #A1A1AA;
+            --accent: #22D3EE;
+            --accent2: #6366F1;
+            --divider: rgba(255,255,255,0.05);
+        }
+        html, body {
+            background: var(--bg);
+            color: var(--primary);
+            font-family: 'Inter', 'Roboto', 'SF Pro', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Sticky Nav */
+        nav.sticky-nav {
+            position: sticky;
+            top: 0;
+            background: #121212;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            padding: 0 2.5rem;
+            border-bottom: 1px solid var(--divider);
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.05em;
+            user-select: none;
+        }
+        .nav-links {
+            display: flex;
+            gap: 2.2rem;
+        }
+        .nav-links a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 1.08rem;
+            font-weight: 500;
+            transition: color 0.18s;
+            padding: 2px 0;
+            position: relative;
+        }
+        .nav-links a.active,
+        .nav-links a:hover,
+        .nav-links a:focus {
+            color: var(--accent);
+        }
+        .nav-links a.active::after {
+            content: '';
+            display: block;
+            height: 2px;
+            width: 100%;
+            background: var(--accent);
+            border-radius: 2px;
+            margin-top: 4px;
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+        }
+        /* Hero Section */
+        .hero {
+            width: 100%;
+            padding: 3.5rem 0 2.5rem 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: var(--bg);
+        }
+        .hero-icon {
+            background: var(--bg-card);
+            border-radius: 50%;
+            width: 74px;
+            height: 74px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 22px;
+            margin-top: 10px;
+            font-size: 2.5rem;
+            color: var(--accent2);
+            box-shadow: 0 2px 12px 0 rgba(34,211,238,0.08);
+        }
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.01em;
+            text-align: center;
+        }
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--secondary);
+            margin-bottom: 0;
+            text-align: center;
+            max-width: 600px;
+        }
+        /* Tutorial Steps */
+        .tutorial-steps {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 2.5rem 1.5rem 0 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 2.2rem;
+        }
+        .step-card {
+            background: var(--bg-card);
+            border-radius: 18px;
+            padding: 2.2rem 2.2rem 2rem 2.2rem;
+            box-sizing: border-box;
+            display: flex;
+            align-items: flex-start;
+            gap: 2rem;
+            box-shadow: none;
+            border: 1px solid var(--divider);
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 0.7s cubic-bezier(.4,2,.6,1) forwards;
+        }
+        .step-card:nth-child(1) { animation-delay: 0.1s; }
+        .step-card:nth-child(2) { animation-delay: 0.2s; }
+        .step-card:nth-child(3) { animation-delay: 0.3s; }
+        .step-card:nth-child(4) { animation-delay: 0.4s; }
+        .step-card:nth-child(5) { animation-delay: 0.5s; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px);}
+            to   { opacity: 1; transform: translateY(0);}
+        }
+        .step-icon {
+            flex-shrink: 0;
+            width: 58px;
+            height: 58px;
+            border-radius: 12px;
+            background: #18181b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.1rem;
+            color: var(--accent2);
+            margin-top: 2px;
+            box-shadow: 0 2px 8px 0 rgba(99,102,241,0.06);
+        }
+        .step-content {
+            flex: 1;
+            min-width: 0;
+        }
+        .step-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            letter-spacing: 0.01em;
+        }
+        .step-desc {
+            font-size: 1.07rem;
+            color: var(--primary);
+            margin-bottom: 0.7rem;
+        }
+        .step-tip {
+            font-size: 0.98rem;
+            color: var(--secondary);
+            margin-bottom: 0.2rem;
+        }
+        /* Mock conversation bubble */
+        .mock-convo {
+            background: #1E1E1E;
+            border-radius: 12px;
+            padding: 1rem 1.3rem;
+            margin-top: 0.7rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            max-width: 350px;
+        }
+        .mock-user, .mock-assistant {
+            font-size: 1rem;
+            line-height: 1.5;
+            border-radius: 10px;
+            padding: 0.7em 1em;
+            margin: 0;
+            width: fit-content;
+            max-width: 90%;
+        }
+        .mock-user {
+            background: #22223b;
+            color: #F1F1F1;
+            align-self: flex-end;
+        }
+        .mock-assistant {
+            background: #2A2A2A;
+            color: #F1F1F1;
+            align-self: flex-start;
+        }
+        /* Command Tiles */
+        .command-tiles {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.1rem;
+            margin-top: 0.7rem;
+        }
+        .command-tile {
+            background: #20202a;
+            color: var(--primary);
+            border-radius: 10px;
+            padding: 0.7em 1.2em;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6em;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: border-color 0.15s, color 0.15s, background 0.15s, transform 0.15s;
+        }
+        .command-tile:hover,
+        .command-tile:focus {
+            border-color: var(--accent2);
+            background: #23234a;
+            color: var(--accent2);
+            outline: none;
+            transform: scale(1.03);
+        }
+        /* Checklist */
+        .checklist {
+            margin: 2.5rem auto 0 auto;
+            max-width: 700px;
+            background: var(--bg-card);
+            border-radius: 14px;
+            padding: 1.7rem 2rem 1.3rem 2rem;
+            border: 1px solid var(--divider);
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+        }
+        .checklist-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.7rem;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: center;
+            gap: 0.9em;
+            font-size: 1.08rem;
+            color: var(--primary);
+        }
+        .checklist-item .bi {
+            color: var(--accent);
+            font-size: 1.25em;
+        }
+        /* Video Tutorial */
+        .video-section {
+            margin: 2.5rem auto 0 auto;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .video-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .video-embed {
+            width: 100%;
+            max-width: 680px;
+            aspect-ratio: 16/9;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #222;
+            box-shadow: 0 2px 12px 0 rgba(34,211,238,0.08);
+        }
+        /* FAQ Accordion */
+        .faq-section {
+            margin: 2.5rem auto 0 auto;
+            max-width: 700px;
+        }
+        .faq-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        .faq-list {
+            border-radius: 12px;
+            background: var(--bg-card);
+            border: 1px solid var(--divider);
+            padding: 1.2rem 1.5rem;
+        }
+        .faq-item {
+            border-bottom: 1px solid var(--divider);
+            padding: 1rem 0;
+        }
+        .faq-item:last-child {
+            border-bottom: none;
+        }
+        .faq-question {
+            font-size: 1.08rem;
+            font-weight: 500;
+            color: var(--primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: color 0.15s;
+        }
+        .faq-question:hover,
+        .faq-question:focus {
+            color: var(--accent2);
+            outline: none;
+        }
+        .faq-answer {
+            color: var(--secondary);
+            font-size: 1rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+        .faq-item.open .faq-answer {
+            display: block;
+        }
+        .faq-item.open .faq-question .bi-chevron-down {
+            transform: rotate(180deg);
+        }
+        .faq-question .bi-chevron-down {
+            transition: transform 0.18s;
+        }
+        /* CTA Footer */
+        .cta-footer {
+            margin: 3.5rem auto 0 auto;
+            max-width: 700px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 2rem;
+        }
+        .cta-title {
+            font-size: 1.45rem;
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            text-align: center;
+        }
+        .cta-btn {
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            color: #fff;
+            font-size: 1.13rem;
+            font-weight: 600;
+            border: none;
+            border-radius: 10px;
+            padding: 0.85em 2.2em;
+            margin-top: 0.5rem;
+            cursor: pointer;
+            box-shadow: 0 2px 12px 0 rgba(99,102,241,0.08);
+            transition: background 0.18s, transform 0.15s;
+        }
+        .cta-btn:hover,
+        .cta-btn:focus {
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            outline: none;
+            transform: scale(1.04);
+        }
+        /* Footer */
+        footer {
+            background: var(--bg-footer);
+            color: var(--primary);
+            border-top: 1px solid rgba(255,255,255,0.10);
+            padding: 1.2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1rem;
+            min-height: 56px;
+        }
+        footer .fw-bold {
+            font-weight: 700;
+            font-size: 1.08rem;
+        }
+        footer nav ul {
+            display: flex;
+            gap: 1.8rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        footer nav a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.15s;
+        }
+        footer nav a:hover,
+        footer nav a:focus {
+            color: var(--accent);
+            outline: none;
+        }
+        footer .text-muted {
+            color: var(--secondary) !important;
+            font-size: 0.97rem;
+        }
+        /* Responsive */
+        @media (max-width: 900px) {
+            .tutorial-steps { padding-left: 0.5rem; padding-right: 0.5rem; }
+            .step-card { flex-direction: column; gap: 1.2rem; padding: 1.3rem 1.1rem 1.1rem 1.1rem;}
+        }
+        @media (max-width: 600px) {
+            nav.sticky-nav { padding-left: 1rem; padding-right: 1rem; }
+            .hero { padding: 2.2rem 0 1.2rem 0; }
+            .tutorial-steps { padding: 1.2rem 0.2rem 0 0.2rem; }
+            .checklist { padding: 1.2rem 0.7rem 1rem 0.7rem; }
+            .video-section, .faq-section, .cta-footer { padding-left: 0.2rem; padding-right: 0.2rem; }
+            footer { padding-left: 1rem; padding-right: 1rem; flex-direction: column; gap: 0.7rem;}
+        }
+        /* Focus outlines for accessibility */
+        .cta-btn:focus, .command-tile:focus, .faq-question:focus, .nav-links a:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav" role="navigation" aria-label="Main Navigation">
+        <div class="nav-logo" aria-label="RIA logo">RIA</div>
+        <div class="nav-links">
+            <a href="#" aria-label="Home">Home</a>
+            <a href="#" aria-label="Features">Features</a>
+            <a href="#" class="active" aria-label="Tutorials">Tutorials</a>
+            <a href="#" aria-label="Contact">Contact</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-icon" aria-label="Microphone icon">
+            <i class="bi bi-mic"></i>
+        </div>
+        <h1 class="hero-title">Get Started with RIA</h1>
+        <div class="hero-subtitle">
+            Learn how to use your intelligent voice assistant in minutes.
+        </div>
+    </section>
+
+    <!-- Tutorial Steps -->
+    <main>
+        <div class="tutorial-steps" aria-label="Tutorial Steps">
+            <!-- Step 1 -->
+            <div class="step-card" tabindex="0">
+                <div class="step-icon" aria-label="Wake word icon">
+                    <i class="bi bi-soundwave"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Step 1: Wake RIA with the Wake Word</div>
+                    <div class="step-desc">Say <b>“Hey RIA”</b> to activate your assistant at any time.</div>
+                    <div class="step-tip">Tip: Wait for the listening sound or waveform before speaking.</div>
+                    <!-- Static waveform illustration -->
+                    <div style="margin-top:0.7rem;">
+                        <svg width="120" height="28" aria-label="Waveform illustration" style="display:block;">
+                            <polyline points="0,14 10,8 20,20 30,6 40,14 50,10 60,24 70,8 80,18 90,12 100,20 110,14 120,10"
+                                fill="none" stroke="#22D3EE" stroke-width="3" stroke-linecap="round" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 2 -->
+            <div class="step-card" tabindex="0">
+                <div class="step-icon" aria-label="Language icon">
+                    <i class="bi bi-translate"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Step 2: Choose Your Language</div>
+                    <div class="step-desc">Select from supported languages: English, हिंदी, தமிழ், తెలుగు, and more.</div>
+                    <div class="step-tip">You can change your language anytime from the settings menu.</div>
+                    <!-- Language dropdown visual -->
+                    <div style="margin-top:0.7rem;">
+                        <label for="lang-select" class="step-tip" style="font-size:1rem;">Language:</label>
+                        <select id="lang-select" aria-label="Select language" style="margin-left:0.7em; padding:0.4em 1em; font-size:1rem; border-radius:8px; border:none; background:#222; color:#F1F1F1;">
+                            <option>English</option>
+                            <option>हिंदी</option>
+                            <option>தமிழ்</option>
+                            <option>తెలుగు</option>
+                            <option>Español</option>
+                            <option>Français</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 3 -->
+            <div class="step-card" tabindex="0">
+                <div class="step-icon" aria-label="Conversation icon">
+                    <i class="bi bi-chat-dots"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Step 3: Ask Your First Question</div>
+                    <div class="step-desc">Try saying something like <b>“What’s the weather today?”</b></div>
+                    <div class="step-tip">RIA will respond instantly in your chosen language.</div>
+                    <!-- Mock conversation -->
+                    <div class="mock-convo" aria-label="Mock conversation">
+                        <div class="mock-user">What’s the weather today?</div>
+                        <div class="mock-assistant">Today’s forecast: 28°C, partly cloudy in your area.</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 4 -->
+            <div class="step-card" tabindex="0">
+                <div class="step-icon" aria-label="Command icon">
+                    <i class="bi bi-sliders"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Step 4: Use Commands</div>
+                    <div class="step-desc">Try saying commands like:</div>
+                    <div class="command-tiles" role="list" aria-label="Command examples">
+                        <div class="command-tile" tabindex="0" aria-label="Set a reminder"><i class="bi bi-bell"></i>Set a reminder</div>
+                        <div class="command-tile" tabindex="0" aria-label="Play music"><i class="bi bi-music-note-beamed"></i>Play music</div>
+                        <div class="command-tile" tabindex="0" aria-label="Translate"><i class="bi bi-globe"></i>Translate this</div>
+                        <div class="command-tile" tabindex="0" aria-label="Send a message"><i class="bi bi-envelope"></i>Send a message</div>
+                    </div>
+                </div>
+            </div>
+            <!-- Step 5 -->
+            <div class="step-card" tabindex="0">
+                <div class="step-icon" aria-label="Personalization icon">
+                    <i class="bi bi-stars"></i>
+                </div>
+                <div class="step-content">
+                    <div class="step-title">Step 5: Personalization Tips</div>
+                    <div class="step-desc">RIA learns your preferences over time to serve you better.</div>
+                    <div class="step-tip">Example: “Remind me to drink water every 2 hours.”</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Start Checklist -->
+        <div class="checklist" aria-label="Quick Start Checklist">
+            <div class="checklist-title">Quick Start Checklist</div>
+            <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Wake RIA with the wake word</div>
+            <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Choose your preferred language</div>
+            <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Ask your first question</div>
+            <div class="checklist-item"><i class="bi bi-check-circle-fill"></i> Try a command or personalization</div>
+        </div>
+
+        <!-- Video Tutorial -->
+        <div class="video-section" aria-label="Video Tutorial">
+            <div class="video-title">Watch RIA in Action</div>
+            <div class="video-embed">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/2vjPBrBU-TM?color=white&modestbranding=1&rel=0"
+                    title="RIA Tutorial Demo Video" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen aria-label="RIA Tutorial Demo Video"></iframe>
+            </div>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq-section" aria-label="Tutorial FAQ">
+            <div class="faq-title">Frequently Asked Questions</div>
+            <div class="faq-list">
+                <div class="faq-item">
+                    <div class="faq-question" tabindex="0" aria-expanded="false">
+                        How do I change the assistant's language?
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Go to the settings menu and select your preferred language from the dropdown list. RIA will respond in the language you choose.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" tabindex="0" aria-expanded="false">
+                        Can I use RIA offline?
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        RIA requires an internet connection for most features, such as voice recognition and real-time information.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" tabindex="0" aria-expanded="false">
+                        What devices support RIA?
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        RIA is available on web, Android, and iOS. Check our website for the latest supported platforms.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question" tabindex="0" aria-expanded="false">
+                        How do I get help or support?
+                        <i class="bi bi-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Use the Contact link in the top navigation or visit the Help section for support resources and FAQs.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Footer -->
+        <div class="cta-footer">
+            <div class="cta-title">Ready to try RIA?</div>
+            <button class="cta-btn" aria-label="Launch Assistant" onclick="window.location.href='talk_with_bot.html'">Launch Assistant</button>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="fw-bold">RIA</div>
+        <nav aria-label="Footer quick links">
+            <ul>
+                <li><a href="#">Terms</a></li>
+                <li><a href="#">Privacy</a></li>
+                <li><a href="#">Help</a></li>
+            </ul>
+        </nav>
+        <div class="text-muted">v1.0.0</div>
+    </footer>
+    <script>
+    // FAQ accordion logic
+    document.querySelectorAll('.faq-question').forEach(q => {
+        q.addEventListener('click', function() {
+            const item = this.closest('.faq-item');
+            const expanded = item.classList.contains('open');
+            document.querySelectorAll('.faq-item').forEach(i => {
+                i.classList.remove('open');
+                i.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+            });
+            if (!expanded) {
+                item.classList.add('open');
+                this.setAttribute('aria-expanded', 'true');
+            }
+        });
+        q.addEventListener('keydown', function(e) {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+    // Checklist accessibility: focusable
+    document.querySelectorAll('.command-tile').forEach(tile => {
+        tile.addEventListener('keydown', function(e) {
+            if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                this.click();
+            }
+        });
+    });
+    </script>
+</body>
+</html>

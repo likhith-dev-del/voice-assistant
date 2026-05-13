@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Signup | Voice Assistant</title>
+    <style>
+        :root {
+            --primary: #00eaff;
+            --primary-dark: #0a2540;
+            --bg-gradient: linear-gradient(135deg, #10131a 0%, #23272f 100%);
+            --card-bg: rgba(18, 22, 28, 0.97);
+            --input-bg: rgba(30, 34, 42, 0.92);
+            --input-focus: #1de9b6;
+            --btn-bg: linear-gradient(90deg, #23272f 0%, #10131a 100%);
+            --btn-hover: linear-gradient(90deg, #10131a 0%, #23272f 100%);
+            --error: #ff5370;
+            --success: #1de9b6;
+            --shadow: 0 8px 32px 0 rgba(10, 14, 30, 0.7);
+            --border-glow: 0 0 8px 2px #00eaff22;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            background: var(--bg-gradient);
+            color: #e0e6ed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        body::before, body::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.25;
+            z-index: 0;
+        }
+        body::before {
+            width: 600px;
+            height: 600px;
+            background: #23272f;
+            left: -200px;
+            top: -200px;
+            animation: float1 12s infinite alternate;
+        }
+        body::after {
+            width: 400px;
+            height: 400px;
+            background: #10131a;
+            right: -120px;
+            bottom: -120px;
+            animation: float2 14s infinite alternate;
+        }
+        @keyframes float1 {
+            0% { transform: translateY(0);}
+            100% { transform: translateY(40px);}
+        }
+        @keyframes float2 {
+            0% { transform: translateY(0);}
+            100% { transform: translateY(-30px);}
+        }
+
+        .signup-container {
+            position: relative;
+            z-index: 1;
+            background: var(--card-bg);
+            padding: 48px 36px 36px 36px;
+            border-radius: 20px;
+            box-shadow: var(--shadow), var(--border-glow);
+            width: 100%;
+            max-width: 420px;
+            border: 1.5px solid #23272f;
+            backdrop-filter: blur(8px);
+            transition: box-shadow 0.3s;
+        }
+
+        .signup-container:hover {
+            box-shadow: 0 12px 40px 0 #10131a55, var(--shadow);
+            border-color: #23272f;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--primary);
+            font-size: 2rem;
+            letter-spacing: 1px;
+            font-weight: 700;
+            text-shadow: 0 2px 16px #00eaff11;
+        }
+
+        label {
+            font-size: 15px;
+            margin-bottom: 8px;
+            display: block;
+            color: #b2eaff;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            border: 1.5px solid #23272f;
+            border-radius: 10px;
+            background: var(--input-bg);
+            color: #e0e6ed;
+            font-size: 1rem;
+            transition: border 0.3s, box-shadow 0.3s, background 0.3s;
+            box-shadow: 0 2px 8px #10131a22;
+            outline: none;
+        }
+
+        input:focus {
+            border: 1.5px solid var(--input-focus);
+            background: #181b22;
+            box-shadow: 0 0 12px 0 #00eaff33;
+        }
+
+        .error {
+            color: var(--error);
+            font-size: 13px;
+            margin-bottom: 10px;
+            display: none;
+            padding-left: 2px;
+            letter-spacing: 0.2px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--btn-bg);
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #e0e6ed;
+            cursor: pointer;
+            margin-top: 16px;
+            box-shadow: 0 2px 12px #10131a33;
+            transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            left: -60px;
+            top: 0;
+            width: 40px;
+            height: 100%;
+            background: linear-gradient(120deg, #fff1 0%, #00eaff22 100%);
+            transform: skewX(-20deg);
+            transition: left 0.4s;
+            z-index: 1;
+            pointer-events: none;
+        }
+        .btn:hover::before {
+            left: 110%;
+        }
+        .btn:hover {
+            background: var(--btn-hover);
+            box-shadow: 0 4px 24px #10131a55;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .message {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 15px;
+            color: var(--success);
+            display: none;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+            text-shadow: 0 1px 8px #1de9b633;
+        }
+
+        input:focus {
+            animation: neon 1.2s ease-in-out infinite alternate;
+        }
+
+        .login-link {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 14px;
+            color: #ccccdd;
+            letter-spacing: 0.4px;
+        }
+        .login-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .login-link a:hover {
+            color: #1de9b6;
+            text-decoration: underline;
+        }
+
+        @keyframes neon {
+            from { box-shadow: 0 0 8px #00eaff22, 0 0 2px #00eaff11; }
+            to { box-shadow: 0 0 16px #00eaff77, 0 0 8px #00eaff33; }
+        }
+
+        @media (max-width: 768px) {
+            .signup-container {
+                padding: 32px 18px 24px 18px;
+                border-radius: 16px;
+            }
+            h2 {
+                font-size: 1.5rem;
+            }
+            input, .btn {
+                font-size: 0.98rem;
+                padding: 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            .signup-container {
+                padding: 18px 6px 18px 6px;
+                border-radius: 12px;
+            }
+            h2 {
+                font-size: 1.2rem;
+            }
+            input, .btn {
+                font-size: 0.93rem;
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="signup-container">
+        <h2><span style="color:#e0e6ed;">Create Your</span> <span style="color:var(--primary);">Account</span></h2>
+        <form id="signupForm" novalidate>
+            <label for="username">Username</label>
+            <input type="text" id="username" required placeholder="Enter your username">
+            <div class="error" id="userError">Username cannot be empty.</div>
+
+            <label for="email">Email</label>
+            <input type="email" id="email" required placeholder="Enter your email">
+            <div class="error" id="emailError">Enter a valid email address.</div>
+
+            <label for="password">Password</label>
+            <input type="password" id="password" required placeholder="Min 6 characters, 1 letter & 1 number">
+            <div class="error" id="passError">Password must be at least 6 characters long and include letters and numbers.</div>
+
+            <button type="submit" class="btn">Sign Up</button>
+        </form>
+
+        <div class="message" id="successMsg">✅ Signup successful! Redirecting...</div>
+        <div class="login-link">
+            Already have an account? <a href="login.html">Login</a>
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('signupForm');
+        const userError = document.getElementById('userError');
+        const emailError = document.getElementById('emailError');
+        const passError = document.getElementById('passError');
+        const successMsg = document.getElementById('successMsg');
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get values
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            let isValid = true;
+
+            // Reset messages
+            userError.style.display = emailError.style.display = passError.style.display = 'none';
+
+            // Username validation
+            if (username === '') {
+                userError.style.display = 'block';
+                isValid = false;
+            }
+
+            // Email validation
+            const emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,6}$/;
+            if (!emailPattern.test(email)) {
+                emailError.style.display = 'block';
+                isValid = false;
+            }
+
+            // Password validation
+            const passPattern = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
+            if (!passPattern.test(password)) {
+                passError.style.display = 'block';
+                isValid = false;
+            }
+
+            if (!isValid) return;
+
+            // Default wake word
+            const defaultWakeWord = "sam";
+
+            // Store in localStorage
+            localStorage.setItem('userName', username);
+            localStorage.setItem('userEmail', email);
+            localStorage.setItem('wakeWord', defaultWakeWord);
+
+            // Simulate success
+            successMsg.style.display = 'block';
+
+            setTimeout(() => {
+                window.location.href = 'language.html'; // Change path if needed
+            }, 2000);
+        });
+    </script>
+
+</body>
+</html>

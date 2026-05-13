@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RIA Home</title>
+  <!-- Google Fonts: Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- Material Icons -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Lottie Player -->
+  <script src="https://unpkg.com/@dotlottie/player-component@2.7.12/dist/dotlottie-player.mjs" type="module"></script>
+  <style>
+    :root {
+      --bg-main: #121212;
+      --bg-card: #1e1e1e;
+      --brand: #fff;
+      --subtitle: #cfcfcf;
+      --body: #a0a0a0;
+      --shadow: 0 4px 24px rgba(0,0,0,0.25);
+      --radius: 20px;
+      --mic: #2196f3;
+      --chat: #43e97b;
+      --history: #ffc857;
+      --transition: 0.2s cubic-bezier(.4,0,.2,1);
+      --accent: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg-main);
+      font-family: 'Inter', sans-serif;
+      color: var(--brand);
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 50%, #0c2920 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, #160d35 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, #02070d 0%, transparent 50%),
+                        linear-gradient(135deg, #0a0a0a 0%, #11111f 50%, #0b1120 100%);
+    }
+
+    /* Navbar */
+    .navbar {
+      width: 100%;
+      padding: 0 2rem;
+      height: 88px; /* Increased from 72px */
+      background: var(--bg-main);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+
+    .brand {
+      font-size: 2.6rem; /* Increased from 1.8rem */
+      font-weight: 900;
+      background: var(--accent);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 0.07em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 2.3rem;
+    }
+
+    .nav-link {
+      color: var(--subtitle);
+      text-decoration: none;
+      font-weight: 700;
+      padding: 0.7rem 1.3rem;
+      font-size: 1.15rem;
+      border-radius: 14px;
+      transition: all var(--transition);
+    }
+
+    .nav-link.active, .nav-link:hover {
+      background: rgba(255,255,255,0.07);
+      color: var(--brand);
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 3rem 1.5rem;
+      max-width: 1440px;
+      margin: 0 auto;
+    }
+
+    /* Avatar Section */
+    .avatar-section {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .avatar-container {
+      width: 500px;
+      height: 500px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #232329 0%, #1a1a1f 100%);
+      margin: 0 auto 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 40px rgba(67,233,123,0.15);
+      border: 2px solid rgba(255,255,255,0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .avatar-container::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 50% 50%, 
+        rgba(67,233,123,0.1) 0%, 
+        transparent 70%);
+    }
+
+    dotlottie-player {
+      width: 520px !important;
+      height: 520px !important;
+      transition: transform 0.3s ease;
+    }
+
+    /* Feature Cards */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      width: 100%;
+      max-width: 1200px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius);
+      padding: 2rem;
+      text-align: center;
+      transition: all var(--transition);
+      border: 1px solid rgba(255,255,255,0.05);
+      cursor: pointer;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow);
+      border-color: rgba(67,233,123,0.3);
+    }
+
+    .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .feature-title {
+      font-size: 1.25rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-desc {
+      color: var(--body);
+      line-height: 1.5;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+        max-width: 600px;
+      }
+      
+      .navbar {
+        padding: 0 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .avatar-container {
+        width: 200px;
+        height: 200px;
+      }
+      
+      dotlottie-player {
+        width: 140px !important;
+        height: 140px !important;
+      }
+    }
+
+    /* Animations */
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .avatar-container {
+      animation: float 4s ease-in-out infinite;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--bg-main);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255,255,255,0.1);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="brand">RIA</div>
+    <div class="nav-links">
+      <a href="home.html" class="nav-link active">Home</a>
+      <a href="features.html" class="nav-link">Features</a>
+      <a href="tutorial.html" class="nav-link">Tutorial</a>
+      <a href="settings.html" class="nav-link">Settings</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Avatar Section -->
+    <section class="avatar-section">
+      <div class="avatar-container">
+        <dotlottie-player
+          src="https://lottie.host/5261cf59-c9bd-4a6c-92df-4e0d554552e4/TLdLOnhyAR.lottie"
+          background="transparent"
+          speed="0.25"
+          loop
+          autoplay
+        ></dotlottie-player>
+      </div>
+      <h1 class="welcome-message">Welcome to RIA</h1>
+      <p class="subtitle-message">Your Intelligent Multilingual Assistant</p>
+    </section>
+
+    <!-- Features Grid -->
+    <div class="features-grid">
+      <div class="feature-card" onclick="window.location='talk_with_bot.html'">
+        <span class="material-icons feature-icon">mic</span>
+        <h2 class="feature-title">Voice Interaction</h2>
+        <p class="feature-desc">Natural conversations using your voice</p>
+      </div>
+      <div class="feature-card" onclick="window.location='chat_with_bot.html'">
+        <span class="material-icons feature-icon">chat</span>
+        <h2 class="feature-title">Smart Chat</h2>
+        <p class="feature-desc">AI-powered text conversations</p>
+      </div>
+      <div class="feature-card" onclick="window.location='history.html'">
+        <span class="material-icons feature-icon">history</span>
+        <h2 class="feature-title">Interaction History</h2>
+        <p class="feature-desc">Review past conversations</p>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Greetings map by language code
+    const greetings = {
+      EN: "Welcome!",
+      HI: "स्वागत है!",
+      TA: "வணக்கம்!",
+      TE: "స్వాగతం!",
+      KN: "ಸ್ವಾಗತ!",
+      BN: "স্বাগতম!",
+      ML: "സ്വാഗതം!"
+    };
+    window.addEventListener('DOMContentLoaded', () => {
+      const greetingDiv = document.getElementById('greeting');
+      const savedLangStr = sessionStorage.getItem('selectedLanguage');
+      let greeting = "Welcome!";
+      if (savedLangStr) {
+        const savedLang = JSON.parse(savedLangStr);
+        greeting = greetings[savedLang.code] || "Welcome!";
+      }
+      greetingDiv.textContent = greeting;
+    });
+
+    // Parallax Effect for avatar
+    window.addEventListener('scroll', () => {
+      const scrolled = window.pageYOffset;
+      document.querySelector('.avatar-container').style.transform = 
+        `translateY(${scrolled * 0.2}px)`;
+    });
+
+    // Smooth transition for navigation links
+    document.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.body.style.opacity = '0';
+        setTimeout(() => window.location = link.href, 300);
+      });
+    });
+  </script>
+  <script>
+    // Optional: Play welcome audio if backend is set up
+    window.addEventListener('DOMContentLoaded', function() {
+      const savedLangStr = sessionStorage.getItem('selectedLanguage');
+      let langCode = 'EN';
+      if (savedLangStr) {
+        const savedLang = JSON.parse(savedLangStr);
+        langCode = savedLang.code || 'EN';
+      }
+      fetch(`http://localhost:5000/welcome-audio?lang=${langCode}`)
+        .then(response => response.blob())
+        .then(blob => {
+          const url = URL.createObjectURL(blob);
+          const audio = new Audio(url);
+          audio.autoplay = true;
+          audio.play().catch(() => {
+            document.body.addEventListener('click', () => audio.play(), { once: true });
+          });
+        });
+    });
+  </script>
+</body>
+</html>

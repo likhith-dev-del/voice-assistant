@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Centered Voice Assistant UI</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Google Fonts for modern look -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- SiriWave -->
+    <script src="https://unpkg.com/siriwave/dist/siriwave.umd.min.js"></script>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            background: #000;
+            font-family: 'Poppins', Arial, sans-serif;
+            overflow: hidden;
+        }
+        body, .main-center {
+            min-height: 100vh;
+            min-width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .main-center {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        /* Bot response bubble */
+        .bot-response {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100vw;
+            margin-bottom: 20px;
+            z-index: 30;
+            position: absolute;
+            top: 32px;
+            left: 0;
+        }
+        .bubble {
+            background: linear-gradient(90deg, #ffe066 0%, #caff70 60%, #ffb347 100%);
+            color: #181818;
+            border-radius: 18px;
+            padding: 18px 32px;
+            font-size: 1.16rem;
+            font-family: 'Poppins', Arial, sans-serif;
+            font-weight: 500;
+            box-shadow: 0 4px 32px 0 rgba(255,224,102,0.11);
+            border: 2px solid #fff3;
+            min-height: 38px;
+            min-width: 120px;
+            letter-spacing: 0.01em;
+            animation: fadeInBubble 0.6s cubic-bezier(.4,2,.6,1) both;
+            text-align: center;
+        }
+        @keyframes fadeInBubble {
+            from { opacity: 0; transform: translateY(40px) scale(0.95);}
+            to   { opacity: 1; transform: translateY(0) scale(1);}
+        }
+        /* Typewriter effect */
+        .typewriter {
+            display: inline-block;
+            overflow: hidden;
+            border-right: .13em solid #181818;
+            white-space: nowrap;
+            animation: typing 2.4s steps(30, end), blink-caret .75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0 }
+            to   { width: 100% }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50%      { border-color: #181818; }
+        }
+        /* OVAL GLOW ANIMATION (yellow, lime, orange) */
+        .oval-holder {
+            position: relative;
+            width: 420px;
+            height: 420px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 30px;
+            margin-top: 70px;
+        }
+        .square {
+            position: absolute;
+            width: 420px;
+            height: 420px;
+            left: 0; top: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+            pointer-events: none;
+        }
+        .square span:nth-child(1) {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            background-image: radial-gradient(#ffe06611 50%, #f5f2383b 40%);
+            box-shadow: 0 0 10px #efce4a, 0 0 120px #dab522, inset 0 0 60px #e4cf77;
+            border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+            animation: animate1 7s linear infinite;
+        }
+        .square span:nth-child(2) {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            background-image: radial-gradient(#caff7011 50%, #caff703b 40%);
+            box-shadow: 0 0 px #2fec38, 0 0 100px #97db22, inset 0 0 60px #aaed36;
+            border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+            animation: animate2 5s linear infinite;
+        }
+        .square span:nth-child(3) {
+            position: absolute; width: 100%; height: 100%; top: 0; left: 0;
+            background-image: radial-gradient(#ffb34711 50%, #ffb3473b 40%);
+            box-shadow: 0 0 0x #a2c63f, 0 0 100px #b5ff47, inset 0 0 60px #afff47;
+            border-radius: 38% 62% 63% 37% / 41% 44% 56% 59%;
+            animation: animate3 9s linear infinite;
+        }
+        @keyframes animate1 { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg);} }
+        @keyframes animate2 { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg);} }
+        @keyframes animate3 { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg);} }
+        /* OVAL center black circle */
+        .oval-center {
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            width: 260px; height: 260px;
+            background: #181818;
+            border-radius: 50%;
+            box-shadow: 0 0 40px #000c;
+            z-index: 3;
+        }
+        /* Particle canvas: centered inside oval */
+        #canvasOne {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 260px;
+            height: 260px;
+            pointer-events: none;
+            z-index: 4;
+        }
+        /* MIC BUTTON - centered below oval, glowy */
+        .mic-stack {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 18px;
+        }
+        .mic-btn {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            background: #181818;
+            border: none;
+            color: #fff;
+            box-shadow: 0 0 0 0 #ffe066, 0 0 28px 12px #ffe06655;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            transition: box-shadow 0.2s, background 0.2s;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+            margin-top: 50px;
+            z-index: 10;
+        }
+        .mic-btn:active, .mic-btn:focus {
+            box-shadow: 0 0 60px 20px #ffe06699, 0 0 80px 30px #caff7099;
+            background: #222;
+            outline: none;
+        }
+        /* Prompt text */
+        .prompt-text {
+            margin-top: 18px;
+            color: #fff;
+            font-size: 1.18rem;
+            letter-spacing: 0.01em;
+            opacity: 0.95;
+            text-align: center;
+            font-family: 'Poppins', Arial, sans-serif;
+        }
+        /* SiriWave animation: shown below oval, same width as oval */
+        #siri-container {
+            width: 420px;
+            max-width: 94vw;
+            height: 80px;
+            margin: 0 auto;
+            margin-top: 40px;
+            display: none;
+            z-index: 10;
+        }
+        /* Responsive */
+        @media (max-width: 600px) {
+            .oval-holder, #siri-container { width: 95vw !important; }
+            .oval-holder, .square { height: 60vw !important; min-height: 220px;}
+            .oval-center { width: 40vw !important; height: 40vw !important; min-width: 120px; min-height: 120px;}
+            #canvasOne { width: 40vw !important; height: 40vw !important; }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-center">
+        <!-- Bot response bubble -->
+        <div class="bot-response" id="botResponse" style="display:flex;">
+            <div class="bubble">
+                <span class="typewriter" id="typewriterText">Hello! How can I assist you today?</span>
+            </div>
+        </div>
+        <!-- OVAL + PARTICLES -->
+        <div class="oval-holder">
+            <div class="square">
+                <span class="circle"></span>
+                <span class="circle"></span>
+                <span class="circle"></span>
+            </div>
+            <div class="oval-center"></div>
+            <canvas id="canvasOne" width="260" height="260"></canvas>
+        </div>
+        <!-- Mic Button (centered below oval) -->
+        <div class="mic-stack">
+            <button id="MicBtn" class="mic-btn" aria-label="Speak">
+                <i class="bi bi-mic"></i>
+            </button>
+            <div class="prompt-text">Tap the mic and speak</div>
+        </div>
+        <!-- Siri Wave (hidden initially) -->
+        <div id="siri-container"></div>
+    </div>
+    <!-- Scripts -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <!-- PARTICLE SPHERE -->
+    <script>
+        // Particle Sphere Animation (blue, distinct from oval)
+        window.addEventListener("load", function() {
+            var theCanvas = document.getElementById("canvasOne");
+            if (!theCanvas.getContext) return;
+            var context = theCanvas.getContext("2d");
+            var sphereRad = 90, fLen = 320, projCenterX = theCanvas.width / 2, projCenterY = theCanvas.height / 2, zMax = fLen - 2;
+            var particleList = {}, recycleBin = {}, particleAlpha = 1, turnAngle = 0, turnSpeed = 2 * Math.PI / 1200;
+            var sphereCenterY = 0, sphereCenterZ = -3 - sphereRad, particleRad = 1.5, zeroAlphaDepth = -400;
+            var randAccelX = 0.1, randAccelY = 0.1, randAccelZ = 0.1, gravity = 0;
+            var rgbString = "rgba(44, 130, 201,";
+            var wait = 1, count = wait - 1, numToAddEachFrame = 5;
+            setInterval(onTimer, 10 / 24);
+            function onTimer() {
+                count++;
+                if (count >= wait) {
+                    count = 0;
+                    for (var i = 0; i < numToAddEachFrame; i++) {
+                        var theta = Math.random() * 2 * Math.PI;
+                        var phi = Math.acos(Math.random() * 2 - 1);
+                        var x0 = sphereRad * Math.sin(phi) * Math.cos(theta);
+                        var y0 = sphereRad * Math.sin(phi) * Math.sin(theta);
+                        var z0 = sphereRad * Math.cos(phi);
+                        var p = addParticle(x0, sphereCenterY + y0, sphereCenterZ + z0, 0.002 * x0, 0.002 * y0, 0.002 * z0);
+                        p.attack = 50; p.hold = 50; p.decay = 100; p.initValue = 0; p.holdValue = particleAlpha; p.lastValue = 0;
+                        p.stuckTime = 90 + Math.random() * 20; p.accelX = 0; p.accelY = gravity; p.accelZ = 0;
+                    }
+                }
+                turnAngle = (turnAngle + turnSpeed) % (2 * Math.PI);
+                var sinAngle = Math.sin(turnAngle), cosAngle = Math.cos(turnAngle);
+                context.clearRect(0, 0, theCanvas.width, theCanvas.height);
+                var p = particleList.first;
+                while (p != null) {
+                    var nextParticle = p.next;
+                    p.age++;
+                    if (p.age > p.stuckTime) {
+                        p.velX += p.accelX + randAccelX * (Math.random() * 2 - 1);
+                        p.velY += p.accelY + randAccelY * (Math.random() * 2 - 1);
+                        p.velZ += p.accelZ + randAccelZ * (Math.random() * 2 - 1);
+                        p.x += p.velX; p.y += p.velY; p.z += p.velZ;
+                    }
+                    var rotX = cosAngle * p.x + sinAngle * (p.z - sphereCenterZ);
+                    var rotZ = -sinAngle * p.x + cosAngle * (p.z - sphereCenterZ) + sphereCenterZ;
+                    var m = 1 * fLen / (fLen - rotZ);
+                    p.projX = rotX * m + projCenterX;
+                    p.projY = p.y * m + projCenterY;
+                    if (p.age < p.attack + p.hold + p.decay) {
+                        if (p.age < p.attack) p.alpha = (p.holdValue - p.initValue) / p.attack * p.age + p.initValue;
+                        else if (p.age < p.attack + p.hold) p.alpha = p.holdValue;
+                        else if (p.age < p.attack + p.hold + p.decay) p.alpha = (p.lastValue - p.holdValue) / p.decay * (p.age - p.attack - p.hold) + p.holdValue;
+                    } else p.dead = true;
+                    var outsideTest = (p.projX > theCanvas.width) || (p.projX < 0) || (p.projY < 0) || (p.projY > theCanvas.height) || (rotZ > zMax);
+                    if (outsideTest || p.dead) recycle(p);
+                    else {
+                        var depthAlphaFactor = (1 - rotZ / zeroAlphaDepth);
+                        depthAlphaFactor = (depthAlphaFactor > 1) ? 1 : ((depthAlphaFactor < 0) ? 0 : depthAlphaFactor);
+                        context.fillStyle = rgbString + depthAlphaFactor * p.alpha + ")";
+                        context.beginPath();
+                        context.arc(p.projX, p.projY, m * particleRad, 0, 2 * Math.PI, false);
+                        context.closePath();
+                        context.fill();
+                    }
+                    p = nextParticle;
+                }
+            }
+            function addParticle(x0, y0, z0, vx0, vy0, vz0) {
+                var newParticle;
+                if (recycleBin.first != null) {
+                    newParticle = recycleBin.first;
+                    if (newParticle.next != null) {
+                        recycleBin.first = newParticle.next;
+                        newParticle.next.prev = null;
+                    } else recycleBin.first = null;
+                } else newParticle = {};
+                if (particleList.first == null) {
+                    particleList.first = newParticle; newParticle.prev = null; newParticle.next = null;
+                } else {
+                    newParticle.next = particleList.first;
+                    particleList.first.prev = newParticle;
+                    particleList.first = newParticle;
+                    newParticle.prev = null;
+                }
+                newParticle.x = x0; newParticle.y = y0; newParticle.z = z0;
+                newParticle.velX = vx0; newParticle.velY = vy0; newParticle.velZ = vz0;
+                newParticle.age = 0; newParticle.dead = false;
+                return newParticle;
+            }
+            function recycle(p) {
+                if (particleList.first == p) {
+                    if (p.next != null) { p.next.prev = null; particleList.first = p.next; }
+                    else particleList.first = null;
+                } else {
+                    if (p.next == null) p.prev.next = null;
+                    else { p.prev.next = p.next; p.next.prev = p.prev; }
+                }
+                if (recycleBin.first == null) { recycleBin.first = p; p.prev = null; p.next = null; }
+                else { p.next = recycleBin.first; recycleBin.first.prev = p; recycleBin.first = p; p.prev = null; }
+            }
+        });
+    </script>
+    <!-- SIRI WAVE + TYPEWRITER LOGIC -->
+    <script>
+        let siriWaveInstance = null;
+        // Example bot responses for demonstration
+        const responses = [
+            "Hello! How can I assist you today?",
+            "Sure, here's the weather forecast for your city.",
+            "I've set a reminder for your meeting at 4 PM.",
+            "Playing your favorite playlist now."
+        ];
+        // Typewriter effect for bot response
+        function typeWriterEffect(element, text, speed = 18, callback) {
+            element.textContent = '';
+            let i = 0;
+            function typing() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(typing, speed);
+                } else if (callback) {
+                    callback();
+                }
+            }
+            typing();
+        }
+        // Show SiriWave and bot response
+        function showSiriWaveAndBotResponse() {
+            // Show SiriWave below oval
+            $("#siri-container").fadeIn(300);
+            // Show bot response with typewriter effect above oval
+            const botResp = responses[Math.floor(Math.random() * responses.length)];
+            $("#botResponse").fadeIn(200);
+            const twElem = document.getElementById("typewriterText");
+            twElem.textContent = '';
+            twElem.classList.remove('typewriter'); // restart animation
+            void twElem.offsetWidth; // trigger reflow
+            twElem.classList.add('typewriter');
+            typeWriterEffect(twElem, botResp, 18);
+            // Start SiriWave
+            if (!siriWaveInstance) {
+                siriWaveInstance = new SiriWave({
+                    container: document.getElementById("siri-container"),
+                    width: Math.min(420, $("#siri-container").width() || 420),
+                    height: 80,
+                    style: "ios9",
+                    amplitude: 1.2,
+                    speed: 0.13,
+                    autostart: true
+                });
+            } else {
+                siriWaveInstance.start();
+            }
+        }
+        $("#MicBtn").on("click", function () {
+            showSiriWaveAndBotResponse();
+        });
+    </script>
+</body>
+</html>
