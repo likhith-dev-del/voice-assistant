@@ -73,60 +73,74 @@ VOICE_MAP = {
     "tamil": "MF3mGyEYCl7XYWbV9V6O",
 }
 
+# @app.route('/speak', methods=['POST'])
+# def speak():
+#     data = request.get_json()
+
+#     user_text = data.get("text")
+#     language = data.get("language", "english").lower()
+
+#     voice_id = VOICE_MAP.get(language, VOICE_MAP["english"])
+
+#     # Gemini AI Response
+#     try:
+#         response_ai = client.models.generate_content(
+#             model="gemini-2.0-flash",
+#             contents=user_text
+#         )
+
+#         bot_reply = response_ai.text
+
+#     except Exception as e:
+#         print("Gemini Error:", e)
+
+#         bot_reply = f"RIA received your message: {user_text}"
+
+#     # ElevenLabs Voice
+#     response = requests.post(
+#         f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
+#         headers={
+#             "xi-api-key": ELEVENLABS_API_KEY,
+#             "Content-Type": "application/json"
+#         },
+#         json={
+#             "text": bot_reply,
+#             "model_id": "eleven_multilingual_v2",
+#             "voice_settings": {
+#                 "stability": 0.4,
+#                 "similarity_boost": 0.75
+#             }
+#         }
+#     )
+
+#     if response.status_code == 200:
+
+#         with open("static/ria_output.mp3", "wb") as f:
+#             f.write(response.content)
+
+#         return jsonify({
+#             "response": bot_reply,
+#             "audio": "/static/ria_output.mp3"
+#         })
+
+#     else:
+#         return jsonify({
+#             "error": "TTS generation failed",
+#             "details": response.text
+#         }), 500
+
 @app.route('/speak', methods=['POST'])
 def speak():
+
     data = request.get_json()
 
     user_text = data.get("text")
-    language = data.get("language", "english").lower()
 
-    voice_id = VOICE_MAP.get(language, VOICE_MAP["english"])
+    bot_reply = f"RIA received your message: {user_text}"
 
-    # Gemini AI Response
-    try:
-        response_ai = client.models.generate_content(
-            model="gemini-2.0-flash",
-            contents=user_text
-        )
+    return jsonify({
+        "response": bot_reply
+    })
 
-        bot_reply = response_ai.text
-
-    except Exception as e:
-        print("Gemini Error:", e)
-
-        bot_reply = f"RIA received your message: {user_text}"
-
-    # ElevenLabs Voice
-    response = requests.post(
-        f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}",
-        headers={
-            "xi-api-key": ELEVENLABS_API_KEY,
-            "Content-Type": "application/json"
-        },
-        json={
-            "text": bot_reply,
-            "model_id": "eleven_multilingual_v2",
-            "voice_settings": {
-                "stability": 0.4,
-                "similarity_boost": 0.75
-            }
-        }
-    )
-
-    if response.status_code == 200:
-
-        with open("static/ria_output.mp3", "wb") as f:
-            f.write(response.content)
-
-        return jsonify({
-            "response": bot_reply,
-            "audio": "/static/ria_output.mp3"
-        })
-
-    else:
-        return jsonify({
-            "error": "TTS generation failed",
-            "details": response.text
-        }), 500
 if __name__ == "__main__":
     app.run(debug=True)
