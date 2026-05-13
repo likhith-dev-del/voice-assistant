@@ -6,10 +6,8 @@ import os
 
 app = Flask(__name__)
 
-ELEVENLABS_API_KEY = "real=key"
-
-# Gemini API Key
-GEMINI_API_KEY = "gemini"
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Configure Gemini
 client = genai.Client(api_key=GEMINI_API_KEY)
