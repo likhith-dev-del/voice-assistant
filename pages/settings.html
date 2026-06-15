@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RIA Settings</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Inter font for modern, readable typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Bootstrap Icons for UI elements -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --bg: #0F0F0F;
+            --bg-card: #18181b;
+            --bg-footer: #0A0A0A;
+            --primary: #F1F1F1;
+            --secondary: #A1A1AA;
+            --accent: #22D3EE;
+            --accent2: #6366F1;
+            --divider: rgba(255,255,255,0.05);
+        }
+        html, body {
+            background: var(--bg);
+            color: var(--primary);
+            font-family: 'Inter', 'Roboto', 'SF Pro', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Sticky Header */
+        nav.sticky-nav {
+            position: sticky;
+            top: 0;
+            background: #121212;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            padding: 0 2.5rem;
+            border-bottom: 1px solid var(--divider);
+        }
+        .nav-logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 0.05em;
+            user-select: none;
+        }
+        .settings-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+            flex: 1;
+            text-align: center;
+            margin-left: -64px;
+        }
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .nav-actions .avatar {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
+            background: #222;
+            color: #A1A1AA;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 600;
+            user-select: none;
+        }
+        /* Main Content */
+        main {
+            flex: 1 1 auto;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 2.5rem 0 6.5rem 0;
+            background: var(--bg);
+            min-height: 0;
+        }
+        .settings-container {
+            width: 100%;
+            max-width: 980px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2.5rem;
+            padding: 0 2rem;
+        }
+        @media (max-width: 900px) {
+            .settings-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                padding: 0 0.5rem;
+            }
+        }
+        /* Section Card */
+        .settings-section {
+            background: var(--bg-card);
+            border-radius: 16px;
+            margin-bottom: 0.5rem;
+            box-shadow: none;
+            border: 1px solid var(--divider);
+            padding: 2.1rem 2rem 1.5rem 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            min-width: 0;
+            opacity: 0;
+            transform: translateY(40px);
+            animation: fadeInUp 0.7s cubic-bezier(.4,2,.6,1) forwards;
+        }
+        .settings-section:nth-child(1) { animation-delay: 0.1s; }
+        .settings-section:nth-child(2) { animation-delay: 0.2s; }
+        .settings-section:nth-child(3) { animation-delay: 0.3s; }
+        .settings-section:nth-child(4) { animation-delay: 0.4s; }
+        .settings-section:nth-child(5) { animation-delay: 0.5s; }
+        .settings-section:nth-child(6) { animation-delay: 0.6s; }
+        .settings-section:nth-child(7) { animation-delay: 0.7s; }
+        .settings-section:nth-child(8) { animation-delay: 0.8s; }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px);}
+            to   { opacity: 1; transform: translateY(0);}
+        }
+        .section-title {
+            font-size: 1.22rem;
+            font-weight: 600;
+            margin-bottom: 0.2rem;
+            letter-spacing: 0.01em;
+        }
+        .section-desc {
+            font-size: 1.01rem;
+            color: var(--secondary);
+            margin-bottom: 0.6rem;
+        }
+        .settings-row {
+            display: flex;
+            align-items: center;
+            gap: 1.3rem;
+            margin-bottom: 1.1rem;
+        }
+        .settings-label {
+            font-size: 1.08rem;
+            font-weight: 500;
+            color: var(--primary);
+            min-width: 140px;
+        }
+        .settings-helper {
+            font-size: 0.95rem;
+            color: var(--secondary);
+            margin-left: 0.5rem;
+        }
+        /* Dropdown & Inputs */
+        select, input[type="text"], input[type="email"], input[type="password"] {
+            background: #222;
+            color: var(--primary);
+            border: none;
+            border-radius: 8px;
+            padding: 0.5em 1em;
+            font-size: 1rem;
+            margin-right: 0.7em;
+            transition: border 0.15s;
+        }
+        select:focus, input:focus {
+            outline: 2px solid var(--accent);
+        }
+        /* Language dropdown with flag */
+        .lang-option {
+            display: flex;
+            align-items: center;
+            gap: 0.6em;
+        }
+        .lang-flag {
+            font-size: 1.1em;
+            margin-right: 0.2em;
+        }
+        /* Voice selection */
+        .voice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.7em;
+        }
+        .voice-item {
+            display: flex;
+            align-items: center;
+            gap: 1em;
+            background: #20202a;
+            border-radius: 8px;
+            padding: 0.7em 1em;
+        }
+        .voice-radio {
+            accent-color: var(--accent2);
+        }
+        .voice-provider {
+            font-size: 0.93em;
+            color: var(--secondary);
+            margin-left: 0.3em;
+        }
+        .voice-preview-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            font-size: 1.1em;
+            cursor: pointer;
+            margin-left: 0.5em;
+            border-radius: 6px;
+            transition: background 0.15s;
+            padding: 0.2em 0.5em;
+        }
+        .voice-preview-btn:hover, .voice-preview-btn:focus {
+            background: #23234a;
+            color: var(--accent2);
+            outline: none;
+        }
+        /* Toggles */
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            display: inline-block;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: #222;
+            border-radius: 26px;
+            transition: background .2s;
+        }
+        .toggle-switch input:checked + .slider {
+            background: var(--accent);
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: #fff;
+            border-radius: 50%;
+            transition: transform .2s;
+        }
+        .toggle-switch input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+        /* Sliders */
+        .settings-slider {
+            width: 160px;
+            accent-color: var(--accent2);
+            margin-left: 0.7em;
+        }
+        /* Buttons */
+        .settings-btn, .settings-btn-secondary {
+            border: none;
+            border-radius: 8px;
+            padding: 0.7em 1.8em;
+            font-size: 1.08rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-right: 1em;
+            transition: background 0.15s, color 0.15s, box-shadow 0.15s;
+        }
+        .settings-btn {
+            background: linear-gradient(90deg, var(--accent2), var(--accent));
+            color: #fff;
+            box-shadow: 0 2px 12px 0 rgba(99,102,241,0.08);
+        }
+        .settings-btn:hover, .settings-btn:focus {
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            outline: 2px solid var(--accent);
+        }
+        .settings-btn-secondary {
+            background: #222;
+            color: var(--secondary);
+            border: 1.5px solid var(--divider);
+        }
+        .settings-btn-secondary:hover, .settings-btn-secondary:focus {
+            background: #23234a;
+            color: var(--accent2);
+            outline: 2px solid var(--accent2);
+        }
+        .danger-btn {
+            background: transparent;
+            color: #F87171;
+            border: 1.5px solid #F87171;
+        }
+        .danger-btn:hover, .danger-btn:focus {
+            background: #1e1e1e;
+            color: #fff;
+            outline: 2px solid #F87171;
+        }
+        /* Section divider */
+        .section-divider {
+            border-bottom: 1px solid var(--divider);
+            margin: 1.5rem 0 0.7rem 0;
+        }
+        /* Helper text */
+        .helper-text {
+            font-size: 0.95rem;
+            color: var(--secondary);
+            margin-top: 0.2em;
+        }
+        /* Account section */
+        .account-info {
+            display: flex;
+            align-items: center;
+            gap: 1.2em;
+            margin-bottom: 1em;
+        }
+        .account-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: #23234a;
+            color: var(--accent2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        .account-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.2em;
+        }
+        .account-email {
+            font-size: 1.1rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+        .account-id {
+            font-size: 0.97rem;
+            color: var(--secondary);
+        }
+        /* Sticky Footer Bar */
+        .sticky-footer {
+            position: fixed;
+            left: 0;
+            bottom: 0;
+            width: 100vw;
+            background: var(--bg-footer);
+            border-top: 1px solid var(--divider);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.2em;
+            padding: 1.1em 0;
+            z-index: 200;
+        }
+        /* Footer */
+        footer {
+            background: var(--bg-footer);
+            color: var(--primary);
+            border-top: 1px solid rgba(255,255,255,0.10);
+            padding: 1.2rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 1rem;
+            min-height: 56px;
+        }
+        footer .fw-bold {
+            font-weight: 700;
+            font-size: 1.08rem;
+        }
+        footer nav ul {
+            display: flex;
+            gap: 1.8rem;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        footer nav a {
+            color: var(--secondary);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.15s;
+        }
+        footer nav a:hover,
+        footer nav a:focus {
+            color: var(--accent);
+            outline: none;
+        }
+        footer .text-muted {
+            color: var(--secondary) !important;
+            font-size: 0.97rem;
+        }
+        /* Responsive */
+        @media (max-width: 900px) {
+            main { padding-top: 1.2rem; }
+            .settings-container { padding: 0 0.2rem; }
+            .settings-section { padding: 1.2rem 1rem 1rem 1rem; }
+        }
+        @media (max-width: 600px) {
+            nav.sticky-nav { padding-left: 1rem; padding-right: 1rem; }
+            .settings-container { grid-template-columns: 1fr; gap: 1.2rem; }
+            .sticky-footer { padding: 0.7em 0; }
+            footer { padding-left: 1rem; padding-right: 1rem; flex-direction: column; gap: 0.7rem;}
+        }
+        /* Focus outlines for accessibility */
+        .settings-btn:focus, .settings-btn-secondary:focus, .danger-btn:focus, select:focus, input:focus {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sticky Navigation -->
+    <nav class="sticky-nav" role="navigation" aria-label="Main Navigation">
+        <div class="nav-logo" aria-label="RIA logo">RIA</div>
+        <div class="settings-title">Settings</div>
+        <div class="nav-actions">
+            <div class="avatar" aria-label="User avatar" tabindex="0"><i class="bi bi-person"></i></div>
+        </div>
+    </nav>
+
+    <!-- Main Settings Content -->
+    <main>
+        <form class="settings-container" autocomplete="off">
+            <!-- 1. Language & Voice -->
+            <section class="settings-section" aria-labelledby="lang-voice-title">
+                <div class="section-title" id="lang-voice-title">Language &amp; Voice</div>
+                <div class="section-desc">Choose your language and preferred assistant voice.</div>
+                <div class="settings-row">
+                    <label class="settings-label" for="language">Language</label>
+                    <select id="language" name="language" aria-label="Select language">
+                        <option value="en"><span class="lang-flag">🇬🇧</span>English</option>
+                        <option value="hi"><span class="lang-flag">🇮🇳</span>हिंदी</option>
+                        <option value="ta"><span class="lang-flag">🇮🇳</span>தமிழ்</option>
+                        <option value="te"><span class="lang-flag">🇮🇳</span>తెలుగు</option>
+                        <option value="es"><span class="lang-flag">🇪🇸</span>Español</option>
+                        <option value="fr"><span class="lang-flag">🇫🇷</span>Français</option>
+                    </select>
+                </div>
+                <div class="settings-row" style="align-items:flex-start;">
+                    <span class="settings-label">Voice</span>
+                    <div class="voice-list" role="radiogroup" aria-label="Voice selection">
+                        <div class="voice-item">
+                            <input class="voice-radio" type="radio" name="voice" id="voice1" value="female1" checked>
+                            <label for="voice1">Female 1 <span class="voice-provider">(ElevenLabs)</span></label>
+                            <button type="button" class="voice-preview-btn" aria-label="Preview Female 1"><i class="bi bi-play-circle"></i></button>
+                        </div>
+                        <div class="voice-item">
+                            <input class="voice-radio" type="radio" name="voice" id="voice2" value="female2">
+                            <label for="voice2">Female 2 <span class="voice-provider">(ElevenLabs)</span></label>
+                            <button type="button" class="voice-preview-btn" aria-label="Preview Female 2"><i class="bi bi-play-circle"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- 2. Wake Word & Activation -->
+            <section class="settings-section" aria-labelledby="wake-title">
+                <div class="section-title" id="wake-title">Wake Word &amp; Activation</div>
+                <div class="section-desc">Control how you activate RIA.</div>
+                <div class="settings-row">
+                    <label class="settings-label" for="wake-toggle">Wake Word</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="wake-toggle" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="settings-helper">Say “Hey RIA” to wake</span>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="wake-word">Wake Word</label>
+                    <input type="text" id="wake-word" value="Hey RIA" aria-label="Wake word">
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="mic-sensitivity">Mic Sensitivity</label>
+                    <input type="range" id="mic-sensitivity" class="settings-slider" min="1" max="10" value="5" aria-valuenow="5" aria-valuemin="1" aria-valuemax="10">
+                    <span class="settings-helper">Low</span>
+                    <span class="settings-helper" style="margin-left:auto;">High</span>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="hotkey">Hotkey</label>
+                    <input type="text" id="hotkey" value="Ctrl+J" aria-label="Desktop hotkey">
+                </div>
+            </section>
+            <!-- 3. Notifications & Feedback -->
+            <section class="settings-section" aria-labelledby="notif-title">
+                <div class="section-title" id="notif-title">Notifications &amp; Feedback</div>
+                <div class="section-desc">Control how RIA responds and notifies you.</div>
+                <div class="settings-row">
+                    <label class="settings-label" for="voice-feedback">Voice Feedback</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="voice-feedback" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="sound-cues">Sound Cues</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="sound-cues" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span class="settings-helper">Start/stop listening</span>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="visual-waveform">Visual Waveform</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="visual-waveform" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="voice-volume">Assistant Volume</label>
+                    <input type="range" id="voice-volume" class="settings-slider" min="0" max="100" value="80" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+                    <span class="settings-helper">0</span>
+                    <span class="settings-helper" style="margin-left:auto;">100</span>
+                </div>
+            </section>
+            <!-- 4. Personalization -->
+            <section class="settings-section" aria-labelledby="personal-title">
+                <div class="section-title" id="personal-title">Personalization</div>
+                <div class="section-desc">Make RIA yours.</div>
+                <div class="settings-row">
+                    <label class="settings-label" for="remember-prefs">Remember Preferences</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="remember-prefs" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <button type="button" class="settings-btn-secondary" id="reset-personalization">Reset Personalization</button>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="theme-select">Theme</label>
+                    <select id="theme-select" aria-label="Theme selection">
+                        <option value="dark" selected>Dark</option>
+                        <option value="light">Light</option>
+                    </select>
+                </div>
+            </section>
+            <!-- 5. Privacy & Security -->
+            <section class="settings-section" aria-labelledby="privacy-title">
+                <div class="section-title" id="privacy-title">Privacy &amp; Security</div>
+                <div class="section-desc">Control your data and privacy.</div>
+                <div class="settings-row">
+                    <label class="settings-label" for="local-storage">Allow Local Storage</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="local-storage" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <button type="button" class="settings-btn-secondary" id="clear-history">Clear Chat History</button>
+                </div>
+                <div class="settings-row">
+                    <a href="#" class="settings-helper" style="text-decoration:underline;" aria-label="Learn how your data is used">Learn how your data is used</a>
+                </div>
+            </section>
+            <!-- 6. Accessibility -->
+            <section class="settings-section" aria-labelledby="access-title">
+                <div class="section-title" id="access-title">Accessibility</div>
+                <div class="section-desc">Make RIA easier to use for everyone.</div>
+                <div class="settings-row">
+                    <label class="settings-label" for="high-contrast">High Contrast Mode</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="high-contrast">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="keyboard-nav">Keyboard Navigation</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="keyboard-nav" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="voice-speed">Voice Speed</label>
+                    <input type="range" id="voice-speed" class="settings-slider" min="0.5" max="2" step="0.01" value="1" aria-valuenow="1" aria-valuemin="0.5" aria-valuemax="2">
+                    <span class="settings-helper">0.5x</span>
+                    <span class="settings-helper" style="margin-left:auto;">2x</span>
+                </div>
+            </section>
+            <!-- 7. Advanced Settings -->
+            <section class="settings-section" aria-labelledby="adv-title">
+                <div class="section-title" id="adv-title">Advanced Settings</div>
+                <div class="section-desc">For power users and developers.</div>
+                <div class="settings-row">
+                    <label class="settings-label" for="dev-mode">Developer Mode</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="dev-mode">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="custom-command">Custom Command</label>
+                    <input type="text" id="custom-command" placeholder="e.g. Open GitHub" aria-label="Custom command">
+                </div>
+                <div class="settings-row">
+                    <label class="settings-label" for="api-key">API Key</label>
+                    <input type="password" id="api-key" placeholder="Enter API key" aria-label="API key">
+                </div>
+            </section>
+            <!-- 8. Account (Optional) -->
+            <section class="settings-section" aria-labelledby="account-title">
+                <div class="section-title" id="account-title">Account</div>
+                <div class="section-desc">Manage your RIA account.</div>
+                <div class="account-info">
+                    <div class="account-avatar" aria-label="User avatar"><i class="bi bi-person-circle"></i></div>
+                    <div class="account-details">
+                        <div class="account-email">user@email.com</div>
+                        <div class="account-id">User ID: 123456</div>
+                    </div>
+                </div>
+                <div class="settings-row">
+                    <button type="button" class="settings-btn-secondary" id="logout-btn"><i class="bi bi-box-arrow-right"></i> Logout</button>
+                    <button type="button" class="danger-btn" id="delete-account-btn"><i class="bi bi-trash"></i> Delete Account</button>
+                </div>
+            </section>
+        </form>
+    </main>
+    <!-- Sticky Save/Reset Footer -->
+    <div class="sticky-footer" role="region" aria-label="Save and Reset Settings">
+        <button class="settings-btn" type="submit" form="settings-form" aria-label="Save Settings">Save Settings</button>
+        <button class="settings-btn-secondary" type="button" id="reset-defaults" aria-label="Reset to Defaults">Reset to Defaults</button>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="fw-bold">RIA</div>
+        <nav aria-label="Footer quick links">
+            <ul>
+                <li><a href="#">Support</a></li>
+                <li><a href="#">Feedback</a></li>
+            </ul>
+        </nav>
+        <div class="text-muted">v1.0.0</div>
+    </footer>
+    <script>
+    // --- Accessibility & UI Interactions ---
+    // Focus states for toggles
+    document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+        toggle.addEventListener('focus', function() {
+            this.nextElementSibling.style.boxShadow = '0 0 0 2px #22D3EE';
+        });
+        toggle.addEventListener('blur', function() {
+            this.nextElementSibling.style.boxShadow = '';
+        });
+    });
+    // Voice preview buttons (demo only)
+    document.querySelectorAll('.voice-preview-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            alert('Playing voice sample (demo only)');
+        });
+    });
+    // Reset Personalization
+    document.getElementById('reset-personalization').addEventListener('click', function() {
+        if (confirm('Reset all personalization data?')) {
+            alert('Personalization reset (demo only)');
+        }
+    });
+    // Clear Chat History
+    document.getElementById('clear-history').addEventListener('click', function() {
+        if (confirm('Clear all chat history? This cannot be undone.')) {
+            alert('Chat history cleared (demo only)');
+        }
+    });
+    // Save/Reset buttons
+    document.querySelector('.settings-btn').addEventListener('click', function(e) {
+        e.preventDefault();
+        alert('Settings saved (demo only)');
+    });
+    document.getElementById('reset-defaults').addEventListener('click', function() {
+        if (confirm('Reset all settings to default values?')) {
+            alert('Settings reset to defaults (demo only)');
+        }
+    });
+    // Logout
+    document.getElementById('logout-btn').addEventListener('click', function() {
+        if (confirm('Log out of your account?')) {
+            alert('Logged out (demo only)');
+        }
+    });
+    // Delete Account
+    document.getElementById('delete-account-btn').addEventListener('click', function() {
+        if (confirm('Delete your account? This cannot be undone.')) {
+            alert('Account deleted (demo only)');
+        }
+    });
+    // Custom command save
+    document.getElementById('save-command').addEventListener('click', function() {
+        alert('Custom command saved (demo only)');
+    });
+    // API key save
+    document.getElementById('save-api').addEventListener('click', function() {
+        alert('API key saved (demo only)');
+    });
+    </script>
+</body>
+</html>
